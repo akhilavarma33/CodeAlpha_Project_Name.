@@ -1,0 +1,76 @@
+import java.util.Scanner;
+
+public class BankingApplication {
+
+    private double balance;
+    private String accountHolderName;
+
+    public BankingApplication(String accountHolderName, double initialBalance) {
+        this.accountHolderName = accountHolderName;
+        this.balance = initialBalance;
+    }
+
+    public void deposit(double amount) {
+        balance += amount;
+        System.out.println("Deposit Successful. New balance is: " + balance);
+    }
+
+    public void withdraw(double amount) {
+        if (balance >= amount) {
+            balance -= amount;
+            System.out.println("Withdrawal Successful. New balance is: " + balance);
+        } else {
+            System.out.println("Insufficient balance.");
+        }
+    }
+
+    public void checkBalance() {
+        System.out.println("Your current balance is: " + balance);
+    }
+
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter your name: ");
+        String accountHolderName = scanner.nextLine();
+
+        System.out.println("Enter your initial balance: ");
+        double initialBalance = scanner.nextDouble();
+        scanner.nextLine(); // Consume newline left-over
+
+        BankingApplication bankingApplication = new BankingApplication(accountHolderName, initialBalance);
+
+        while (true) {
+            System.out.println("1. Deposit");
+            System.out.println("2. Withdraw");
+            System.out.println("3. Check Balance");
+            System.out.println("4. Exit");
+            System.out.println("Choose an option: ");
+            int option = scanner.nextInt();
+            scanner.nextLine(); // Consume newline left-over
+
+            switch (option) {
+                case 1:
+                    System.out.println("Enter amount to deposit: ");
+                    double depositAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline left-over
+                    bankingApplication.deposit(depositAmount);
+                    break;
+                case 2:
+                    System.out.println("Enter amount to withdraw: ");
+                    double withdrawAmount = scanner.nextDouble();
+                    scanner.nextLine(); // Consume newline left-over
+                    bankingApplication.withdraw(withdrawAmount);
+                    break;
+                case 3:
+                    bankingApplication.checkBalance();
+                    break;
+                case 4:
+                    System.out.println("Exiting the program. Goodbye!");
+                    return;
+                default:
+                    System.out.println("Invalid option. Please choose a valid option.");
+            }
+        }
+    }
+}
