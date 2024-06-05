@@ -1,0 +1,173 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
+
+class Room {
+    private int id;
+    private String category;
+    private int maxOccupancy;
+    private double pricePerGuest;
+    private boolean available;
+
+    public Room(int id, String category, int maxOccupancy, double pricePerGuest) {
+        this.id = id;
+        this.category = category;
+        this.maxOccupancy = maxOccupancy;
+        this.pricePerGuest = pricePerGuest;
+        this.available = true;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public int getMaxOccupancy() {
+        return maxOccupancy;
+    }
+
+    public double getPricePerGuest() {
+        return pricePerGuest;
+    }
+
+    public boolean isAvailable() {
+        return available;
+    }
+
+    public void setAvailable(boolean available) {
+        this.available = available;
+    }
+}
+
+class Reservation {
+    private int id;
+    private Room room;
+    private int numOfGuests;
+    private String checkIn;
+    private String checkOut;
+    private double totalPrice;
+
+    public Reservation(int id, Room room, int numOfGuests, String checkIn, String checkOut) {
+        this.id = id;
+        this.room = room;
+        this.numOfGuests = numOfGuests;
+        this.checkIn = checkIn;
+        this.checkOut = checkOut;
+        this.totalPrice = calculateTotalPrice();
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public Room getRoom() {
+        return room;
+    }
+
+    public int getNumOfGuests() {
+        return numOfGuests;
+    }
+
+    public String getCheckIn() {
+        return checkIn;
+    }
+
+    public String getCheckOut() {
+        return checkOut;
+    }
+
+    public double getTotalPrice() {
+        return totalPrice;
+    }
+
+    private double calculateTotalPrice() {
+        return room.getPricePerGuest() * numOfGuests;
+    }
+}
+
+public class HotelReservationSystem {
+    private List<Room> rooms;
+    private List<Reservation> reservations;
+
+    public HotelReservationSystem() {
+        this.rooms = new ArrayList<>();
+        this.reservations = new ArrayList<>();
+    }
+
+    public void addRoom(Room room) {
+        rooms.add(room);
+    }
+
+    public void makeReservation(int roomId, int numOfGuests, String checkIn, String checkOut) {
+        Room room = getRoomById(roomId);
+        if (room!= null && room.isAvailable()) {
+            Reservation reservation = new Reservation(reservations.size() + 1, room, numOfGuests, checkIn, checkOut);
+            reservations.add(reservation);
+            room.setAvailable(false);
+            System.out.println("Reservation made successfully!");
+        } else {
+            System.out.println("Room not available!");
+        }
+    }
+
+    public void viewBookingDetails(int reservationId) {
+        Reservation reservation = getReservationById(reservationId);
+        if (reservation!= null) {
+            System.out.println("Reservation Details:");
+            System.out.println("Room ID: " + reservation.getRoom().getId());
+            System.out.println("Room Category: " + reservation.getRoom().getCategory());
+            System.out.println("Number of Guests: " + reservation.getNumOfGuests());
+            System.out.println("Check-in: " + reservation.getCheckIn());
+            System.out.println("Check-out: " + reservation.getCheckOut());
+            System.out.println("Total Price: $" + reservation.getTotalPrice());
+        } else {
+            System.out.println("Reservation not found!");
+        }
+    }
+
+    public void searchAvailableRooms(String category) {
+        System.out.println("Available Rooms:");
+        for (Room room : rooms) {
+            if (room.isAvailable() && room.getCategory().equals(category)) {
+                System.out.println("Room ID: " + room.getId());
+                System.out.println("Room Category: " + room.getCategory());
+                System.out.println("Max Occupancy: " + room.getMaxOccupancy());
+                System.out.println("Price per Guest: $" + room.getPricePerGuest());
+                System.out.println();
+            }
+        }
+    }
+
+    public void processPayment(int reservationId) {
+        Reservation reservation = getReservationById(reservationId);
+        if (reservation!= null) {
+            System.out.println("Payment processed successfully!");
+            // Simulate payment processing
+            try {
+                Thread.sleep(2000);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        } else {
+            System.out.println("Reservation not found!");
+        }
+    }
+
+    private Room getRoomById(int id) {
+        for (Room room : rooms) {
+            if (room.getId() == id) {
+                return room;
+            }
+        }
+        return null;
+    }
+
+    private Reservation getReservationById(int id) {
+        for (Reservation reservation : reservations) {
+            if (reservation.getId() == id) {
+                return reservation;
+            }
+       
